@@ -6,20 +6,22 @@ import org.springframework.web.reactive.socket.client.ReactorNettyWebSocketClien
 import org.springframework.web.reactive.socket.client.WebSocketClient;
 import reactor.core.publisher.Mono;
 
+import java.io.IOException;
 import java.net.URI;
 
 public class NeonReactiveClientWebsocket {
-    public static void main(String[] args) throws Exception{
+    public static void main(String[] args) throws Exception {
+
+        String websocketURI = "ws://localhost:8080/emitter";
         String message = "event-spring-reactive-client-websocket";
 
         WebSocketClient neonWebsocketClient = new ReactorNettyWebSocketClient();
         neonWebsocketClient.execute(
-                URI.create("ws://localhost:8080/event-emitter") ,
-                session -> session.send(
-                        Mono.just(session.textMessage(message)))
-                        .thenMany(session.receive()
-                                .map(WebSocketMessage::getPayloadAsText).
-                        log())
-                        .then()).block();
+                URI.create(websocketURI),
+                        session -> session.send(Mono.just(session.textMessage(message)))
+                                .thenMany(session.receive()
+                                        .map(WebSocketMessage::getPayloadAsText).log())
+                                .then())
+                .block();
     }
 }

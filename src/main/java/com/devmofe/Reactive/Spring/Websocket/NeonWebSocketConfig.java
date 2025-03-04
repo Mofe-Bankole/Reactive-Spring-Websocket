@@ -1,5 +1,6 @@
 package com.devmofe.Reactive.Spring.Websocket;
 
+import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.stereotype.Component;
@@ -20,13 +21,12 @@ import java.util.logging.Logger;
 @Configuration
 public class NeonWebSocketConfig implements WebFluxConfigurer {
 
-    private static final Logger LOGGER =
-            Logger.getLogger(NeonWebSocketConfig.class.getName());
+    private static final org.slf4j.Logger LOGGER = LoggerFactory.getLogger(NeonWebSocketConfig.class.getName());
 
     @Bean
     public HandlerMapping webSocketMapping(NeonSocketHandler neonSocketHandler){
         Map<String , WebSocketHandler> neonSocketHandlerMap = new HashMap<>();
-        neonSocketHandlerMap.put("/event-emitter" , neonSocketHandler);
+        neonSocketHandlerMap.put("/emitter" , neonSocketHandler);
 
         SimpleUrlHandlerMapping mapping = new SimpleUrlHandlerMapping();
         mapping.setUrlMap(neonSocketHandlerMap);
@@ -41,7 +41,6 @@ public class NeonWebSocketConfig implements WebFluxConfigurer {
         return new WebSocketHandlerAdapter(webSocketService());
     }
 
-    @Bean
     private WebSocketService webSocketService(){
         return new HandshakeWebSocketService();
     }

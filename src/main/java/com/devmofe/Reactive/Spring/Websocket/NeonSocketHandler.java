@@ -6,17 +6,16 @@ import org.springframework.web.reactive.socket.WebSocketSession;
 import reactor.core.publisher.Mono;
 
 public class NeonSocketHandler implements WebSocketHandler {
-    private static final org.slf4j.Logger LOGGER =
-            LoggerFactory.getLogger(NeonSocketHandler.class.getName());
+    private static final org.slf4j.Logger LOGGER = LoggerFactory.getLogger(NeonSocketHandler.class.getName());
 
     @Override
     public Mono<Void> handle(WebSocketSession session) {
-        return session.send(
-                session.receive()
-                        .map(msg -> {
-                            String receivedMsg = msg.getPayloadAsText();
-                            LOGGER.info("Received Message: " + receivedMsg);
-                            return session.textMessage("Echo: " + receivedMsg);
+        return session.send( // Sends message back to the Client
+                session.receive() // Listens from incoming messages from the client
+                        .map(msg -> { // Transforms the message
+                            String receivedMsg = msg.getPayloadAsText(); // Extracts the message as text
+                            LOGGER.info("Received Message: " + receivedMsg); // Logs the message
+                            return session.textMessage("Echo : " + receivedMsg); // Echoes back the message
                         })
         );
     }

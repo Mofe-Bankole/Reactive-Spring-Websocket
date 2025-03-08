@@ -6,7 +6,8 @@ import org.springframework.web.reactive.socket.WebSocketSession;
 import reactor.core.publisher.Mono;
 
 public class NeonSocketHandler implements WebSocketHandler {
-    private static final org.slf4j.Logger LOGGER = LoggerFactory.getLogger(NeonSocketHandler.class.getName());
+    private static final org.slf4j.Logger LOGGER =
+            LoggerFactory.getLogger(NeonSocketHandler.class.getName());
 
     @Override
     public Mono<Void> handle(WebSocketSession session) {

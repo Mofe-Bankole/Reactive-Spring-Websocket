@@ -14,23 +14,24 @@ import org.springframework.web.reactive.socket.server.support.WebSocketHandlerAd
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.logging.Logger;
 
 
 @Component
 @Configuration
-public class NeonWebSocketConfig implements WebFluxConfigurer {
+public class WebSocketConfig implements WebFluxConfigurer {
 
     private static final org.slf4j.Logger LOGGER = LoggerFactory.getLogger(NeonWebSocketConfig.class.getName());
 
     @Bean
-    public HandlerMapping webSocketMapping(NeonSocketHandler neonSocketHandler){
+    public HandlerMapping webSocketMapping(NeonSocketHandler neonSocketHandler , NexusSocketHandler nexusSocketHandler){
         Map<String , WebSocketHandler> neonSocketHandlerMap = new HashMap<>();
-        neonSocketHandlerMap.put("/emitter" , neonSocketHandler);
+        neonSocketHandlerMap.put("/nsh" , neonSocketHandler);
 
+        Map<String , WebSocketHandler> nexusSocketHandlerMap = new HashMap<>();
+        nexusSocketHandlerMap.put("/")
         SimpleUrlHandlerMapping mapping = new SimpleUrlHandlerMapping();
         mapping.setUrlMap(neonSocketHandlerMap);
-        mapping.setOrder(1);
+        mapping.setOrder(-1);
 
         return mapping;
     }

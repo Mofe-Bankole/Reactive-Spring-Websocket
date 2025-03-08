@@ -1,4 +1,4 @@
-package com.devmofe.Reactive.Spring.Websocket;
+package com.devmofe.Reactive.Spring.Websocket.Handlers;
 
 import org.slf4j.LoggerFactory;
 import org.springframework.web.reactive.socket.WebSocketHandler;
@@ -11,12 +11,11 @@ public class NeonSocketHandler implements WebSocketHandler {
 
     @Override
     public Mono<Void> handle(WebSocketSession session) {
-        return session.send( // Sends message back to the Client
-                session.receive() // Listens from incoming messages from the client
-                        .map(msg -> { // Transforms the message
-                            String receivedMsg = msg.getPayloadAsText(); // Extracts the message as text
-                            LOGGER.info("Received Message: " + receivedMsg); // Logs the message
-                            return session.textMessage("Echo : " + receivedMsg); // Echoes back the message
+        return session.send (
+                session.receive()
+                        .map(msg -> {
+                            String receivedMsg = msg.getPayloadAsText();
+                            return session.textMessage("Echo : " + receivedMsg);
                         })
         );
     }

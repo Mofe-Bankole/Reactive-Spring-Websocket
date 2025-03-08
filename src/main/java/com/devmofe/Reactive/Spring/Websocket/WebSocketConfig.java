@@ -1,5 +1,7 @@
 package com.devmofe.Reactive.Spring.Websocket;
 
+import com.devmofe.Reactive.Spring.Websocket.Handlers.NeonSocketHandler;
+import com.devmofe.Reactive.Spring.Websocket.Handlers.NexusSocketHandler;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -20,19 +22,21 @@ import java.util.Map;
 @Configuration
 public class WebSocketConfig implements WebFluxConfigurer {
 
-    private static final org.slf4j.Logger LOGGER = LoggerFactory.getLogger(NeonWebSocketConfig.class.getName());
+    private static final org.slf4j.Logger LOGGER = LoggerFactory.getLogger(WebSocketConfig.class.getName());
 
     @Bean
     public HandlerMapping webSocketMapping(NeonSocketHandler neonSocketHandler , NexusSocketHandler nexusSocketHandler){
         Map<String , WebSocketHandler> neonSocketHandlerMap = new HashMap<>();
-        neonSocketHandlerMap.put("/nsh" , neonSocketHandler);
+        neonSocketHandlerMap.put("/neon" , neonSocketHandler);
 
         Map<String , WebSocketHandler> nexusSocketHandlerMap = new HashMap<>();
-        nexusSocketHandlerMap.put("/")
+        nexusSocketHandlerMap.put("/nexus" , nexusSocketHandler);
+
         SimpleUrlHandlerMapping mapping = new SimpleUrlHandlerMapping();
         mapping.setUrlMap(neonSocketHandlerMap);
-        mapping.setOrder(-1);
+        mapping.setUrlMap(nexusSocketHandlerMap);
 
+        mapping.setOrder(-1);
         return mapping;
     }
 
@@ -45,8 +49,14 @@ public class WebSocketConfig implements WebFluxConfigurer {
     private WebSocketService webSocketService(){
         return new HandshakeWebSocketService();
     }
+
     @Bean
     public NeonSocketHandler neonSocketHandler(){
         return new NeonSocketHandler();
+    }
+
+    @Bean
+    public NexusSocketHandler nexusSocketHandler(){
+        return new NexusSocketHandler();
     }
 }
